@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "employee.h"
+#include "utn_menu.h"
+#define LENEMPLEADOS 1000
+
+int main(void) 
+{
+	Employee aEmpleados [LENEMPLEADOS];
+	setbuf (stdout, NULL);
+	empleado_inicializarArray(aEmpleados, LENEMPLEADOS);
+	utn_menu (aEmpleados, LENEMPLEADOS);
+	return EXIT_SUCCESS;
+}

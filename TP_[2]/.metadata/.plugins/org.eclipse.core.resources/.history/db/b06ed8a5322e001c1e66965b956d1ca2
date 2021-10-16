@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "employee.h"
+#include "utn_ordenar.h"
+#include "utn_pedirCadena.h"
+
+static void utn_subMenu (Employee aEmpleados [], int lenArray);
+void utn_menu (Employee aEmpleados [], int lenArray)
+{
+	int opcion;
+	int lugarLibre;
+	int IDdarDeBaja;
+	float retornoPromedio;
+	float acumuladorSalario;
+	int flagOpcion = 1;
+	do{
+		if (utn_getNumeroInt(&opcion, "\nBienvenido \nUtilice el teclado numerico para elecionar una opcion:\n1)Altas:\n2)Modificar:\n3)Baja:\n4)Informar:\n", "\nA seleccionado una opcion Invalida", 1, 4, 10)==0)
+			{
+			switch (opcion)
+				{
+					case 1:
+						if (DameUnLugarLibre(aEmpleados, lenArray, &lugarLibre)==0)
+							{
+								loadEmpleado(&aEmpleados[lugarLibre]);
+							}
+						flagOpcion = 0;
+					break;
+					case 2:
+						utn_subMenu(aEmpleados, lenArray);
+					break;
+					case 3:
+						if (imprimirEmpleados(aEmpleados, lenArray)==0)
+							{
+								if (utn_getNumeroInt(&IDdarDeBaja, "\nIngrese ID del empleado que desea darle la baja del sistema: \nVolver al menu principal", "Error opcion incorrecta", 0, 1000, 5)==0)
+								{
+									if (darDeBaja(aEmpleados, IDdarDeBaja, lenArray)==0)
+									{
+										printf ("El empleado con ID: %d, ha sido dado de baja.", IDdarDeBaja);
+									}
+									else
+									{
+										printf ("El id ingresado no pertenece a ningun empleado.");
+									}
+								}
+							}
+					break;
+					case 4:
+					if (flagOpcion == 0)
+					{
+						printf ("1. Listado de los empleados ordenados alfabéticamente por Apellido y Sector.");
+						if (ordenarArray(aEmpleados, lenArray)==0)
+							{
+								imprimirEmpleados(aEmpleados, lenArray);
+							}
+						else
+						{
+							printf ("\nSe deben ingresar al menos dos emplados para poder listarlos en forma ordenada.");
+						}
+					if (promedioSalario(aEmpleados, lenArray, &retornoPromedio, &acumuladorSalario)==0)
+					{
+						printf ("\n1.2. Total de los salarios $ %.2f", acumuladorSalario);
+						printf ("\n1.3. Promedio de los salarios ingresados:$ %.2f", retornoPromedio);
+					}
+					}
+					else
+					{
+						printf ("No se puede ingresar a esta opcion sin antes haber dado de alta algun empleado");
+					}
+				break;
+				}
+			}
+	}while (opcion <=4);
+
+}
+static void utn_subMenu (Employee aEmpleados [], int lenArray)
+{
+	int IDaModificar;
+		if (imprimirEmpleados(aEmpleados, lenArray)==0)
+		{
+			if (utn_getNumeroInt(&IDaModificar, "\nIngrese ID del empleado a modificar: \nVolver al menu principal", "Error opcion incorrecta", 0, 1000, 5)==0)
+			{
+				if(BuscarPorId(aEmpleados, IDaModificar, lenArray)==0)
+				{
+					modificarEmpleado(&aEmpleados[IDaModificar]);
+					imprimirEmpleados(aEmpleados, lenArray);
+				}
+				else
+				{
+					printf ("El ID ingresado es invalido.");
+				}
+			}
+		}
+}
+

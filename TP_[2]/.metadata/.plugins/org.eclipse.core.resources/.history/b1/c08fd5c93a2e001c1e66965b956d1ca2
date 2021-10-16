@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "employee.h"
+int sortEmployees(Employee* list, int len, int order)
+{
+
+	int flagSwap;
+	int i;
+	int retorno = -1;
+	Employee buffer;
+	int auxiliar;
+	if (list != NULL && len >= 0){
+	do{
+		flagSwap = 0;
+		for (i = 0; i < len -1 ; i++){
+			if (order == 0)
+			{
+				if (list[i].flagEmpty || list[i+1].flagEmpty)
+				{
+					continue;
+				}
+				auxiliar = strncmp (list[i].lastName,list[i+1].lastName,len);
+				if (auxiliar > 0 || (auxiliar == 0 && list [i].sector < list[i+1].sector)){
+					flagSwap = 1;
+					buffer = list [i];
+					list [i] = list [i+1];
+					list [i+1] = buffer;
+				}
+				retorno = 0;
+			}
+			else
+			{
+				if (list[i].flagEmpty || list[i-1].flagEmpty)
+				{
+				continue;
+				}
+				auxiliar = strncmp (list[i].lastName,list[i-1].lastName,len);
+				if (auxiliar > 0 || (auxiliar == 0 && list [i].sector > list[i+1].sector)){
+				flagSwap = 1;
+				buffer = list [i];
+				list [i] = list [i+1];
+				list [i+1] = buffer;
+				}
+				retorno = 0;
+			}
+		}
+	}while (flagSwap);
+	}
+	return retorno;
+}
+

@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "employee.h"
+int ordenarArray (Employee array [], int len)
+{
+	int flagSwap;
+	int i;
+	int retorno = -1;
+	Employee buffer;
+	int auxiliar;
+	if (array != NULL && len >= 0){
+	do{
+		flagSwap = 0;
+		for (i = 0; i < len -1 ; i++){
+			if (array[i].flagEmpty || array[i+1].flagEmpty)
+			{
+				continue;
+			}
+			auxiliar = strncmp (array[i].lastName,array[i+1].lastName,len);
+			if (auxiliar > 0 || (auxiliar == 0 && array [i].sector < array[i+1].sector)){
+				flagSwap = 1;
+				buffer = array [i];
+				array [i] = array [i+1];
+				array [i+1] = buffer;
+			}
+			retorno = 0;
+		}
+	}while (flagSwap);
+	}
+	return retorno;
+}

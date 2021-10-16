@@ -1,0 +1,10 @@
+#define EMPLOYEE_H_
+#include "employee.h"
+#include <string.h>
+
+#ifndef UTN_ORDENAR_H_
+#define UTN_ORDENAR_H_
+
+int ordenarArray (Employee array [], int len);
+
+#endif /* UTN_ORDENAR_H_ */

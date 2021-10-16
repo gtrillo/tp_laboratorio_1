@@ -1,0 +1,21 @@
+#ifndef EMPLOYEE_H_
+#define EMPLOYEE_H_
+#include "employee.h"
+typedef struct
+{
+	int id;
+	char name [51];
+	char lastName [51];
+	float salary;
+	int sector;
+	int flagEmpty; //esta variable sera utilizada para saber si una posicion esta disponible o no 0: ocupado 1: libre
+}Employee;
+int initEmployees(Employee* list, int len);
+int loadEmpleado (Employee* pEmpleado);
+int DameUnLugarLibre (Employee pEmpleado[], int lenArray, int* retornoPosicionLibre);
+int BuscarPorId (Employee aEmpleados[], int indiceIngresado, int lenArray);
+int darDeBaja (Employee aEmpleados[], int indiceIngresado, int lenArray);
+int imprimirEmpleados (Employee aEmpleados[], int lenArray);
+int modificarEmpleado(Employee* aEmpleados);
+int promedioSalario (Employee array [], int len, float *resultado, float* retornoAcumSalario);
+#endif /* EMPLOYEE_H_ */
