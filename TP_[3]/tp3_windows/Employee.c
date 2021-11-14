@@ -76,7 +76,7 @@ int employee_getNombre(Employee* this,char* nombre)
 	if (this != NULL && nombre != NULL)
 	{
 			retorno = 0;
-			strncpy (this->nombre, nombre, LENNOMBRE);
+			strncpy (nombre, this->nombre, LENNOMBRE);
 	}
 	return retorno;
 }
@@ -105,7 +105,7 @@ int employee_getHorasTrabajadas(Employee* this,int* horasTrabajadas)
 	if (this != NULL && horasTrabajadas != NULL)
 	{
 		retorno = 0;
-		this -> horasTrabajadas = *horasTrabajadas;
+		*horasTrabajadas = this -> horasTrabajadas;
 	}
 	return retorno;
 }
@@ -135,7 +135,7 @@ int employee_getSueldo(Employee* this,int* sueldo)
 		if (this != NULL && sueldo != NULL)
 		{
 			retorno = 0;
-			this -> sueldo = *sueldo;
+			*sueldo = this -> sueldo;
 		}
 		return retorno;
 }

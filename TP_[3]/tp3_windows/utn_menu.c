@@ -7,13 +7,13 @@
 #include "utn_menu.h"
 
 static void imprimirOpciones (void);
+
 /** \brief funsion de menu
 * \param lista listSalon*
 * \param largo del array arcade
 * \param listArcade
 * \param largo del array salones
 */
-
 void utn_menu (LinkedList* listaEmpleados, int lenLista)
 {
 	int opcion;
@@ -30,35 +30,82 @@ void utn_menu (LinkedList* listaEmpleados, int lenLista)
 			}
 			break;
 		case 2:
-			if (controller_loadFromBinary("dataBinario.csv", listaEmpleados)==0)
+			if (controller_loadFromBinary("dataBinario.bin", listaEmpleados)==0)
 			{
-				printf ("Archivo cargado correctamente");
+				printf ("Archivo cargado correctamente.");
+			}
+			else
+			{
+				printf ("Error al cargar el archivo de texto.");
 			}
 			break;
 		case 3:
 			controller_addEmployee(listaEmpleados);
 			break;
 		case 4:
-			controller_ListEmployee(listaEmpleados);
-			controller_editEmployee(listaEmpleados);
+			if (ll_len(listaEmpleados)>0)
+			{
+				controller_ListEmployee(listaEmpleados);
+				controller_editEmployee(listaEmpleados);
+			}else
+			{
+				printf ("No se puede ingresar a esta opcion sin antes haber dado de alta un empleado.");
+			}
 			break;
 		case 5:
-			controller_ListEmployee(listaEmpleados);
-			if (controller_removeEmployee(listaEmpleados)==0)
+			if (ll_len(listaEmpleados)>0)
 			{
-				printf("El empleado ha sido dado de baja");
+				controller_ListEmployee(listaEmpleados);
+				if (controller_removeEmployee(listaEmpleados)==0)
+				{
+					printf("El empleado ha sido dado de baja.");
+				}
+			}else
+			{
+				printf ("No se puede ingresar a esta opcion sin antes haber dado de alta un empleado.");
 			}
 			break;
 		case 6:
-			controller_ListEmployee(listaEmpleados);
+			if (ll_len(listaEmpleados)>0)
+			{
+				controller_ListEmployee(listaEmpleados);
+			}else
+			{
+				printf ("No se puede ingresar a esta opcion sin antes haber dado de alta un empleado.");
+			}
 			break;
 		case 7:
+			if (ll_len(listaEmpleados)>0)
+			{
+				if (controller_sortEmployee(listaEmpleados)!=-1)
+				{
+					controller_ListEmployee(listaEmpleados);
+				}
+			}else
+			{
+				printf ("No se puede ingresar a esta opcion sin antes haber dado de alta un empleado.");
+			}
 			break;
 		case 8:
-			controller_saveAsText("data.csv", listaEmpleados);
+			if (ll_len(listaEmpleados)>0)
+			{
+				if (controller_saveAsText("data.txt", listaEmpleados)==0)
+				{
+					printf ("archivo guardado correctamente.");
+				}
+			}else
+			{
+				printf ("No se puede ingresar a esta opcion sin antes haber dado de alta un empleado.");
+			}
 			break;
 		case 9:
-			controller_saveAsBinary("dataBinario.csv", listaEmpleados);
+			if (ll_len(listaEmpleados)>0)
+			{
+			controller_saveAsBinary("dataBinario.bin", listaEmpleados);
+			}else
+			{
+				printf ("No se puede ingresar a esta opcion sin antes haber dado de alta un empleado.");
+			}
 			break;
 		case 10:
 			exit (0);

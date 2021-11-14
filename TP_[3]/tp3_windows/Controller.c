@@ -16,6 +16,8 @@ static int modificarNombre (char pNombre[]);
 static int modificarSueldo (int* pSueldo);
 static int modificarHorasTrabajadas (int* pCantidadHorasTrabajadas);
 int controller_dameUnIdNuevo(LinkedList* pArrayListEmployee);
+static void controller_imprimirOpciones();
+static int controller_subSort(void* primerNombre, void* segundoNombre);
 /** \brief Carga los datos de los empleados desde el archivo data.csv (modo texto).
  *
  * \param path char*
@@ -36,6 +38,7 @@ int controller_loadFromText(char* path , LinkedList* pArrayListEmployee)
 		{
 			printf ("\nerror al cargar el archivo de texto");
 		}
+		fclose(archivo);
 	}
 	return retorno;
 }
@@ -61,8 +64,8 @@ int controller_loadFromBinary(char* path , LinkedList* pArrayListEmployee)
 			{
 				printf ("\nError al cargar el archivo");
 			}
+			fclose(archivo);
 		}
-
 	    return retorno;
 }
 
@@ -290,9 +293,44 @@ int controller_ListEmployee(LinkedList* pArrayListEmployee)
  */
 int controller_sortEmployee(LinkedList* pArrayListEmployee)
 {
+	int opcion;
+	int retorno = -1;
 
+	if (pArrayListEmployee != NULL && ll_len(pArrayListEmployee)>0)
+	{
+		controller_imprimirOpciones();
+		if(utn_getNumeroInt(&opcion, "opcion:\n", "Error. opcion:\n", 0, 1, 5)==0)
+		{
+			retorno = ll_sort(pArrayListEmployee, controller_subSort, opcion);
+		}
+	}
+
+	return retorno;
 }
 
+static void controller_imprimirOpciones()
+{
+	printf ("\nIngrese 0 o 1:");
+	printf ("\n0-ordenar nombre de manera descendente:\n");
+	printf ("\n1-ordenar nombre de manera ascendente:\n");
+}
+
+static int controller_subSort(void* primerNombre, void* segundoNombre)
+{
+	int retorno;
+	char auxPrimerNombre [LENNOMBRE];
+	char auxSegundoNombre [LENNOMBRE];
+	Employee* primero = (Employee*) primerNombre;
+	Employee* segundo = (Employee*) segundoNombre;
+
+	if (employee_getNombre(primero, auxPrimerNombre) != -1 && employee_getNombre(segundo, auxSegundoNombre)!= -1)
+	{
+		retorno = strcmp (auxPrimerNombre, auxSegundoNombre);
+	}
+
+
+	return retorno;
+}
 /** \brief Guarda los datos de los empleados en el archivo data.csv (modo texto).
  *
  * \param path char*
@@ -316,15 +354,19 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 		for (i = 0; i < ll_len(pArrayListEmployee); i++)
 		{
 			auxpEmployee = ll_get(pArrayListEmployee, i);
-			employee_getId(auxpEmployee, &auxID);
-			employee_getNombre(auxpEmployee, auxNombre);
-			employee_getHorasTrabajadas(auxpEmployee, &auxHorasTrabajadas);
-			employee_getSueldo(auxpEmployee, &auxSueldo);
-
-			fprintf (archivo, "%d,%s,%d,%d\n",auxID, auxNombre, auxHorasTrabajadas, auxSueldo );
+			if (auxpEmployee != NULL)
+			{
+				retorno = 0;
+				employee_getId(auxpEmployee, &auxID);
+				employee_getNombre(auxpEmployee, auxNombre);
+				employee_getHorasTrabajadas(auxpEmployee, &auxHorasTrabajadas);
+				employee_getSueldo(auxpEmployee, &auxSueldo);
+				//printf ("%d,%s,%d,%d\n",auxID, auxNombre, auxHorasTrabajadas, auxSueldo);
+				fprintf (archivo, "%d,%s,%d,%d\n",auxID, auxNombre, auxHorasTrabajadas, auxSueldo);
+			}
 		}
+		fclose(archivo);
 	}
-
 	return retorno;
 }
 
@@ -338,7 +380,7 @@ int controller_saveAsText(char* path , LinkedList* pArrayListEmployee)
 int controller_saveAsBinary(char* path , LinkedList* pArrayListEmployee)
 {
 	int retorno = -1;
-	Employee* auxEmployee;
+	Employee* auxEmployee = employee_new();
 	int i;
 	if (pArrayListEmployee != NULL)
 		{
@@ -392,23 +434,35 @@ int controller_printEmployee (LinkedList* pArrayListEmployee, int id)
 {
 	int retorno;
 	int indice;
-    Employee* auxiliar;
+	char auxNombre [LENNOMBRE];
+	int auxID;
+	int auxHorasTrabajadas;
+	int auxSueldo;
+    Employee* auxiliarEmployee;
 	if (pArrayListEmployee != NULL && id >=0 && ll_len(pArrayListEmployee)>0)
 	{
 		indice = controller_buscarPorId(pArrayListEmployee, id);
 		if (indice != -1)
 		{
-			auxiliar = ll_get(pArrayListEmployee, indice);
-			if (auxiliar != NULL)
+			auxiliarEmployee = ll_get(pArrayListEmployee, indice);
+			if (auxiliarEmployee != NULL)
 			{
+				employee_getId(auxiliarEmployee, &auxID);
+				employee_getNombre(auxiliarEmployee, auxNombre);
+				employee_getHorasTrabajadas(auxiliarEmployee, &auxHorasTrabajadas);
+				employee_getSueldo(auxiliarEmployee, &auxSueldo);
+				printf("\nID: %d | NOMBRE: %s | HORAS TRABAJADAS : %d | SUELDO: %d|", auxID, auxNombre, auxHorasTrabajadas, auxSueldo);
 				retorno = 0;
-				printf("\nID: %d | NOMBRE: %s | HORAS TRABAJADAS : %d | SUELDO: %d|",auxiliar->id,auxiliar->nombre,auxiliar->horasTrabajadas,auxiliar->sueldo);
 			}
 		}
 	}
 	return retorno;
 }
-
+/** \brief Genera un numero id nuevo.
+ * \param pArrayListEmployee LinkedList*
+ * \return int
+ *
+ */
 int controller_dameUnIdNuevo(LinkedList* pArrayListEmployee)
 {
 	int retorno = -1;
@@ -421,7 +475,6 @@ int controller_dameUnIdNuevo(LinkedList* pArrayListEmployee)
 		idNuevo = largoLista ++;
 		retorno = idNuevo;
 	}
-
 	return retorno;
 }
 
