@@ -5,6 +5,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include "utn_menu.h"
 #define REINTENTOS 3 //cantidad de veces que se pide un numero
 
 //prototipo de las funsiones

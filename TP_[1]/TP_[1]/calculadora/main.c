@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utn_protipos.h"
+#include "utn_menu.h"
 
 int main(void) {
 	setbuf (stdout, NULL);
